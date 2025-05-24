@@ -1,6 +1,8 @@
+// components/ProfileImageUpLoader/
 import { useState, useRef, ChangeEvent } from 'react';
-import { createClient } from '@supabase/supabase-js';
 import styles from './ProfileImageUploader.module.css';
+import { uploadProfileImageToCloudinary, deleteImageFromCloudinary } from "../../services/cloudinaryService"
+import { updateUserAvatar } from '../../services/supabaseProfileService';
 
 // Types pour les props du composant
 interface ProfileImageUploaderProps {
@@ -10,19 +12,8 @@ interface ProfileImageUploaderProps {
   onError?: (error: Error) => void;
 }
 
-// Configuration Supabase
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || '';
-const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY || '';
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-// Configuration Cloudinary
-const CLOUDINARY_API_KEY = process.env.REACT_APP_CLOUDINARY_API_KEY || '435534777496377';
-const CLOUDINARY_CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME || 'dbwsjshde';
-const CLOUDINARY_UPLOAD_PRESET = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET || 'profile_avatars';
-const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
-
 const ProfileImageUploader = ({
-  initialImageUrl = '/api/placeholder/150/150',
+  initialImageUrl = 'https://placehold.co/150x150?text=Avatar&font=roboto',
   userId,
   onSuccess,
   onError
@@ -77,6 +68,11 @@ const ProfileImageUploader = ({
     });
   };
 
+  // Vérifier si l'URL est une image Cloudinary (et pas le placeholder)
+  const isCloudinaryImage = (url: string): boolean => {
+    return url.includes('cloudinary.com') || url.includes('res.cloudinary.com');
+  };
+
   // Sauvegarder l'image sur Cloudinary puis dans Supabase
   const saveImage = async () => {
     if (imageUrl === initialImageUrl || isLoading) return;
@@ -84,6 +80,14 @@ const ProfileImageUploader = ({
     try {
       setIsLoading(true);
       setError(null);
+
+      // Sauvegarder l'ancienne URL pour pouvoir la supprimer après
+      const oldImageUrl = initialImageUrl;
+      console.log('🔍 Analyse de l\'ancienne image:', {
+        oldImageUrl,
+        isCloudinary: isCloudinaryImage(oldImageUrl),
+        currentImageUrl: imageUrl
+      });
 
       // Convertir l'URL data en blob si nécessaire
       let imageBlob: Blob;
@@ -96,41 +100,44 @@ const ProfileImageUploader = ({
         imageBlob = await response.blob();
       }
 
-      // Préparer le formulaire pour Cloudinary
-      const formData = new FormData();
-      formData.append('file', imageBlob);
-      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-      formData.append('api_key', CLOUDINARY_API_KEY);
-
-      // Envoyer à Cloudinary
-      const cloudinaryResponse = await fetch(CLOUDINARY_URL, {
-        method: 'POST',
-        body: formData
-      });
-
-      if (!cloudinaryResponse.ok) {
-        throw new Error('Erreur lors de l\'upload sur Cloudinary');
-      }
-
-      const cloudinaryData = await cloudinaryResponse.json();
-      const cloudinaryUrl = cloudinaryData.secure_url;
+      // Upload de la nouvelle image sur Cloudinary
+      console.log('📤 Upload de la nouvelle image...');
+      const cloudinaryUrl = await uploadProfileImageToCloudinary(imageBlob);
+      console.log('✅ Nouvelle image uploadée:', cloudinaryUrl);
 
       // Sauvegarder l'URL dans Supabase
-      const { error: supabaseError } = await supabase
-        .from('profiles')
-        .update({ avatar_url: cloudinaryUrl })
-        .eq('id', userId);
+      console.log('💾 Sauvegarde dans Supabase...');
+      await updateUserAvatar(userId, cloudinaryUrl);
+      console.log('✅ Avatar mis à jour dans Supabase');
 
-      if (supabaseError) {
-        throw new Error(`Erreur Supabase: ${supabaseError.message}`);
+      // Supprimer l'ancienne image de Cloudinary (seulement si c'était une image Cloudinary)
+      if (oldImageUrl && isCloudinaryImage(oldImageUrl)) {
+        console.log('🗑️ Tentative de suppression de l\'ancienne image:', oldImageUrl);
+        try {
+          const deleteSuccess = await deleteImageFromCloudinary(oldImageUrl);
+          console.log('🔍 Résultat suppression:', deleteSuccess);
+          if (!deleteSuccess) {
+            console.warn('⚠️ Impossible de supprimer l\'ancienne image de Cloudinary:', oldImageUrl);
+          } else {
+            console.log('✅ Ancienne image supprimée avec succès');
+          }
+        } catch (deleteError) {
+          console.error('❌ Erreur lors de la suppression de l\'ancienne image:', deleteError);
+          // On ne fait pas échouer tout le processus si la suppression échoue
+        }
+      } else {
+        console.log('ℹ️ Pas de suppression nécessaire (pas une image Cloudinary ou pas d\'ancienne image)');
       }
+
+      // Mettre à jour l'état local avec la nouvelle URL
+      setImageUrl(cloudinaryUrl);
 
       // Appeler le callback de succès si fourni
       if (onSuccess) {
         onSuccess(cloudinaryUrl);
       }
     } catch (err) {
-      console.error('Erreur lors de la sauvegarde:', err);
+      console.error('❌ Erreur lors de la sauvegarde:', err);
       setError(err instanceof Error ? err.message : 'Une erreur est survenue');
       
       // Appeler le callback d'erreur si fourni
@@ -150,11 +157,18 @@ const ProfileImageUploader = ({
         onMouseLeave={() => setIsHovering(false)}
         onMouseMove={handleMouseMove}
       >
-        <img 
-          src={imageUrl} 
-          alt="Image de profil" 
+        <img
+          src={imageUrl}
           className={styles.profileImage}
           onClick={handleImageClick}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              handleImageClick();
+            }
+          }}
+          aria-label="Changer l'image de profil"
         />
         
         {/* Message au survol */}

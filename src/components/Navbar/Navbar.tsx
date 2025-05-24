@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FiShoppingCart, FiUser } from "react-icons/fi";
+import { FiShoppingCart, FiUser, FiList } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import styles from "./Navbar.module.css";
 import { useAuth } from "../../context/AuthContext";
@@ -21,16 +21,18 @@ const Navbar: React.FC = () => {
 
   return (
     <div className={styles.navbar}>
-      <div className={styles.brand}>Wawe</div>
-
+          <Link to="/">
+             <div className={styles.brand}>Wawe</div>
+          </Link>
       {user ? (
         <div className={styles.icons}>
-          <Link to="/cart" className={styles.icon}>
+          <Link to="/ingredients" className={styles.icon}>
+            {renderIcon(FiList)}
+          </Link>
+          <Link to="/" className={styles.icon}>
             {renderIcon(FiShoppingCart)}
           </Link>
-          {/* <FiUser className={styles.icon} onClick={() => setShowModal(!showModal)} /> */}
-
-                        <div 
+            <div 
               className={styles.icon} 
               onClick={() => setShowModal(!showModal)}
             >
@@ -39,11 +41,11 @@ const Navbar: React.FC = () => {
         </div>
       ) : null}
 
-      {showModal && user?.user.email && (
+      {showModal && user?.email && (
         <UserModal
           onClose={() => setShowModal(false)}
           onLogout={handleLogout}
-          email={user.user.email} 
+          email={user.email} 
         />
       )}
     </div>

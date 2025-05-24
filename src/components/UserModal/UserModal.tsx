@@ -17,10 +17,10 @@ interface UserProfile {
 
 const UserModal: React.FC<UserModalProps> = ({ onClose, onLogout, email }) => {
   const { user } = useAuth();
-  const [avatarUrl, setAvatarUrl] = useState<string>('/api/placeholder/150/150');
+  const [avatarUrl, setAvatarUrl] = useState<string>('https://placehold.co/150x150?text=Avatar&font=roboto');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const userId = user?.user.id || '';
+  const userId = user?.id || '';
 
   // Récupérer ou créer le profil utilisateur au chargement du composant
   useEffect(() => {
@@ -44,7 +44,7 @@ const UserModal: React.FC<UserModalProps> = ({ onClose, onLogout, email }) => {
                 .from('profiles')
                 .insert({
                   id: userId,
-                  avatar_url: '/api/placeholder/150/150', // URL par défaut
+                  avatar_url: 'https://placehold.co/150x150?text=Avatar&font=roboto', // URL par défaut
                   username: email.split('@')[0], // Utilise la partie locale de l'email comme nom d'utilisateur par défaut
                   created_at: new Date().toISOString(),
                   updated_at: new Date().toISOString(),
@@ -60,7 +60,7 @@ const UserModal: React.FC<UserModalProps> = ({ onClose, onLogout, email }) => {
               console.error('Erreur lors de la récupération du profil:', fetchError);
             }
           } else if (profile) {
-  setAvatarUrl(profile.avatar_url || '/api/placeholder/150/150');
+  setAvatarUrl(profile.avatar_url || 'https://placehold.co/150x150?text=Avatar&font=roboto');
   setProfile({
     avatar_url: profile.avatar_url,
     username: profile.username,
@@ -76,7 +76,7 @@ const UserModal: React.FC<UserModalProps> = ({ onClose, onLogout, email }) => {
     };
 
     initializeUserProfile();
-  }, [userId]);
+  }, [userId,email]);
 
   const handleImageSuccess = (url: string) => {
     setAvatarUrl(url);

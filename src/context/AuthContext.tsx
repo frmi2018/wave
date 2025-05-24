@@ -1,23 +1,36 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../services/supabaseClient";
-import { Session, AuthError } from "@supabase/supabase-js";
+import { User } from "@supabase/supabase-js";
 
 interface AuthContextType {
-  user: Session | null;
+  user: User | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<Session | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
+  // Récupère l'utilisateur actuel au premier chargement
   useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+      setLoading(false);
+    };
+
+    getUser();
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session);
+      setUser(session?.user ?? null);
     });
 
     return () => {
@@ -26,29 +39,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = async (email: string, password: string) => {
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) throw error;
-      setUser(data.session);
-    } catch (error) {
-      console.error("Erreur lors de la connexion :", (error as AuthError).message);
-    }
+    console.log("Tentative de connexion avec :", email, password);
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+    console.error("Erreur de connexion Supabase :", error.message);
+    throw error;
+  }
+    setUser(data.user); // ✅ Ici, on stocke directement le `user`
   };
 
   const logout = async () => {
-    try {
-      await supabase.auth.signOut();
-      setUser(null);
-    } catch (error) {
-      console.error("Erreur lors de la déconnexion :", (error as AuthError).message);
-    }
+    await supabase.auth.signOut();
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

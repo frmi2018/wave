@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import Navbar from "../components/Navbar/Navbar";
 import Login from "../components/LoginModal/LoginModal";
 import SignUp from "../components/SignUpModal/SignUpModal";
 import UserRecipes from "../components/UserRecipes/UserRecipes";
 
 const Home: React.FC = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
 
@@ -26,9 +25,12 @@ const Home: React.FC = () => {
     setShowSignUpModal(!showSignUpModal);
   };
 
+  if (loading) {
+  return <div>Chargement...</div>;
+}
+
   return (
     <div>
-      <Navbar />
       {user ? (
         <>
         <UserRecipes/>

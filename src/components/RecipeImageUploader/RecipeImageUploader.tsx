@@ -1,6 +1,11 @@
 import { useState, useRef, ChangeEvent } from 'react';
-import { createClient } from '@supabase/supabase-js';
 import styles from './RecipeImageUploader.module.css';
+import { supabase } from '../../services/supabaseClient';
+import {
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_UPLOAD_PRESET_RECIPES,
+  getCloudinaryUploadUrl
+} from '../../services/cloudinaryConfig';
 
 // Types pour les props du composant
 interface RecipeImageUploaderProps {
@@ -10,19 +15,10 @@ interface RecipeImageUploaderProps {
   onError?: (error: Error) => void;
 }
 
-// Configuration Supabase
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || '';
-const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY || '';
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-// Configuration Cloudinary
-const CLOUDINARY_API_KEY = process.env.REACT_APP_CLOUDINARY_API_KEY || '435534777496377';
-const CLOUDINARY_CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME || 'dbwsjshde';
-const CLOUDINARY_UPLOAD_PRESET = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET_RECIPES || 'recipe_images';
-const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+const CLOUDINARY_URL = getCloudinaryUploadUrl();
 
 const RecipeImageUploader = ({
-  initialImageUrl = '/api/placeholder/300/200',
+  initialImageUrl = 'https://placehold.co/300x300?text=Photo+recette&font=roboto',
   recipeId,
   onSuccess,
   onError
@@ -99,7 +95,7 @@ const RecipeImageUploader = ({
       // Préparer le formulaire pour Cloudinary
       const formData = new FormData();
       formData.append('file', imageBlob);
-      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+      formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET_RECIPES);
       formData.append('api_key', CLOUDINARY_API_KEY);
 
       // Envoyer à Cloudinary
@@ -152,7 +148,7 @@ const RecipeImageUploader = ({
       >
         <img 
           src={imageUrl} 
-          alt="Image de la recette" 
+          alt="Recette" 
           className={styles.recipeImage}
           onClick={handleImageClick}
         />
