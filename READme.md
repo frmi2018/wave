@@ -16,13 +16,21 @@ https://wawe.vercel.app/
 ## ✅ Fonctionnalités actuelles
 
 - Connexion à une base de données (supabase)
+- Enregistrement média sur Cloudinary
+- Serverless Vercel
 - connection/déconection utilisateur
+- Affichage des ingrédients
+- Affichage des recettes
+- Ajout/suppression d'ingrédients/recettes
+- Modification recette/ingrédient
+- Composant de recherche
+- Composant de tri
 
 ## 🚀 Lancer le projet localement
 
 ```bash
 npm install
-npm start
+npx vercel dev
 ```
 
 L'application sera disponible sur http://localhost:3000.
@@ -36,12 +44,6 @@ Fichiers de configuration présents pour Jest :
 
 ## 🧠 À venir
 
-- Affichage des ingrédients
-- Affichage des recettes
-- Ajout/suppression d'ingrédients/recettes
-- Modification recette/ingrédient
-- Composant de recherche
-- Composant de tri
 - panier
 - partage de recette entre utilisateur
 - ajout d'un lien vers une video youtube dans les recettes
@@ -49,4 +51,3 @@ Fichiers de configuration présents pour Jest :
 ## ✍️ Auteur
 
 Projet développé par Franck Michaud.
-Ce projet a pour objectif d’expérimenter les fonctionnalités de Next.js le tout enrichi avec l’assistance de GitHub Copilot.

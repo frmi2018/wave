@@ -1,5 +1,6 @@
 // services/cloudinaryService.ts
 
+import { Body } from 'node-fetch';
 import {
   CLOUDINARY_API_KEY,
   CLOUDINARY_UPLOAD_PRESET_PROFILE,
@@ -90,8 +91,10 @@ export const deleteImageFromCloudinary = async (imageUrl: string): Promise<boole
         'Content-Type': 'application/json',
         // Si besoin, ajoute un token d'authentification ici
       },
-      body: JSON.stringify({ publicId }),
+      body: JSON.stringify({ publicId }),      
     });
+
+    console.log(response)
 
     if (!response.ok) {
       const text = await response.text();
