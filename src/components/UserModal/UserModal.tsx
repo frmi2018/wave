@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./UserModal.module.css";
 import { useAuth } from "../../context/AuthContext";
-import { supabase } from "../../services/supabaseClient";
+import { supabase } from "../../config/supabaseClient";
 import ProfileImageUploader from '../ProfileImageUploader/ProfileImageUploader';
 
 interface UserModalProps {

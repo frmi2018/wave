@@ -1,5 +1,5 @@
 // services/supabaseProfileService.ts
-import { supabase } from './supabaseClient';
+import { supabase } from '../config/supabaseClient';
 
 /**
  * Met à jour l'avatar d'un utilisateur dans Supabase.

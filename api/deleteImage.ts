@@ -2,9 +2,9 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import crypto from 'crypto';
 import fetch from 'node-fetch';
 
-const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY!;
+const REACT_APP_CLOUDINARY_API_KEY = process.env.REACT_APP_CLOUDINARY_API_KEY!;
 const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET!;
-const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME!;
+const REACT_APP_CLOUDINARY_CLOUD_NAME = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME!;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'DELETE') {
@@ -26,12 +26,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const params = new URLSearchParams();
     params.append('public_id', publicId);
     params.append('timestamp', timestamp.toString());
-    params.append('api_key', CLOUDINARY_API_KEY);
+    params.append('api_key', REACT_APP_CLOUDINARY_API_KEY);
     params.append('signature', signature);
 
     // Appel API Cloudinary pour suppression
     const cloudinaryRes = await fetch(
-      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/destroy`,
+      `https://api.cloudinary.com/v1_1/${REACT_APP_CLOUDINARY_CLOUD_NAME}/image/destroy`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

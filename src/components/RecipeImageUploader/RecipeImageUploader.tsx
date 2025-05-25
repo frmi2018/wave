@@ -1,11 +1,11 @@
 import { useState, useRef, ChangeEvent } from 'react';
 import styles from './RecipeImageUploader.module.css';
-import { supabase } from '../../services/supabaseClient';
+import { supabase } from '../../config/supabaseClient';
 import {
   CLOUDINARY_API_KEY,
   CLOUDINARY_UPLOAD_PRESET_RECIPES,
   getCloudinaryUploadUrl
-} from '../../services/cloudinaryConfig';
+} from '../../config/cloudinaryConfig';
 
 // Types pour les props du composant
 interface RecipeImageUploaderProps {

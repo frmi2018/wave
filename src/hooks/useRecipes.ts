@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Recipe, AvailableIngredient, RecipeFormData } from '../types/recipe';
-import { RecipeService } from '../services/recipeService';
+import { RecipeCreationService } from '../services/recipesCreationService';
+import { RecipeManagementService } from '../services/recipeManagementService';
 import { RecipeValidator } from '../utils/recipeValidation';
 
 interface UseRecipesReturn {
@@ -29,7 +30,7 @@ export const useRecipes = (userId: string | null): UseRecipesReturn => {
     setErrorMessage(null);
 
     try {
-      const data = await RecipeService.getUserRecipes(userId);
+      const data = await RecipeManagementService.getUserRecipes(userId);
       setRecipes(data);
     } catch (error) {
       console.error('Erreur lors de la récupération des recettes :', error);
@@ -41,7 +42,7 @@ export const useRecipes = (userId: string | null): UseRecipesReturn => {
 
   const fetchAvailableIngredients = useCallback(async () => {
     try {
-      const data = await RecipeService.getAvailableIngredients();
+      const data = await RecipeCreationService.getAvailableIngredients();
       setAvailableIngredients(data);
     } catch (error) {
       console.error('Erreur lors de la récupération des ingrédients :', error);
@@ -63,7 +64,7 @@ export const useRecipes = (userId: string | null): UseRecipesReturn => {
     setIsSubmitting(true);
 
     try {
-      const recipeId = await RecipeService.createRecipe(formData, userId);
+      const recipeId = await RecipeCreationService.createRecipe(formData, userId);
       if (!recipeId) throw new Error("La création de la recette a échoué, ID manquant");
       await fetchUserRecipes();
       return recipeId;

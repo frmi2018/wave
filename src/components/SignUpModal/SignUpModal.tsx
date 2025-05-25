@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { supabase } from "../../services/supabaseClient";
+import { supabase } from "../../config/supabaseClient";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../../components/Toast/ToastContext";
 import styles from "./SignUpModal.module.css";

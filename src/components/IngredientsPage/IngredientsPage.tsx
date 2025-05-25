@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiX } from 'react-icons/fi';
 import styles from './IngredientsPage.module.css';
-import { supabase } from '../../services/supabaseClient';
+import { supabase } from '../../config/supabaseClient';
 import { renderIcon } from '../../utils/iconUtils';
 
 interface Ingredient {

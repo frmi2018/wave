@@ -5,7 +5,7 @@ Site communautaire pour partager des recettes de cuisines.
 📅 started april 2025
 in progress...
 
-https://wawe.vercel.app/
+https://wawe-frmi2018s-projects.vercel.app/
 
 ---
 
@@ -30,7 +30,12 @@ https://wawe.vercel.app/
 
 ```bash
 npm install
-npx vercel dev
+npm start => projet React App (CRA) à utiliser
+
+et pour tester comme sur Vercel (production)
+
+npm run build
+serve -s build
 ```
 
 L'application sera disponible sur http://localhost:3000.

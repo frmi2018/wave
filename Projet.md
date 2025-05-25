@@ -15,10 +15,10 @@ L'application permettra de :
 Visual studio code
 React
 Supabase pour l'authentification et la base de données
-Cloudinary pour le stockage des images
+Cloudinary pour le stockage des médias
 CSS natif avec module pour le styling
 Github
-Vercel pour le déploiement du projet
+Vercel pour le déploiement du projet et la gestion serverless
 
 ## Structure de base du projet
 
@@ -110,20 +110,16 @@ is_checked (boolean, default: false)
 
 Phase 1 : Configuration initiale et authentification
 
-Mise en place de Next.js
-Configuration de Supabase
 Création du système d'authentification
 
 Phase 2 : Gestion des recettes
 
 Création et affichage des recettes
 Ajout des images avec Cloudinary
-Partage entre utilisateurs
 
 Phase 3 : Gestion des ingrédients
 
-Liste des ingrédients disponibles
-Interface pour ajouter/supprimer des ingrédients
+Création et affichage des ingrédients
 
 Phase 4 : Panier de courses
 

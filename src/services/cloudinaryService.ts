@@ -1,11 +1,10 @@
 // services/cloudinaryService.ts
 
-import { Body } from 'node-fetch';
 import {
   CLOUDINARY_API_KEY,
   CLOUDINARY_UPLOAD_PRESET_PROFILE,
   getCloudinaryUploadUrl,
-} from './cloudinaryConfig';
+} from '../config/cloudinaryConfig';
 
 /**
  * ✅ Upload de l'image de profil (Blob) sur Cloudinary avec un preset spécifique.

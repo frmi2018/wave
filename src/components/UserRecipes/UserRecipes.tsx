@@ -8,7 +8,7 @@ import RecipeFormModal from './RecipeFormModal';
 import RecipeImageUploader from '../RecipeImageUploader/RecipeImageUploader';
 import styles from './UserRecipes.module.css';
 import type { Recipe } from '../../types/recipe';
-import {RecipeService} from '../../services/recipeService'
+import {RecipeManagementService} from '../../services/recipeManagementService'
 
 const UserRecipes: React.FC = () => {
   const { user } = useAuth();
@@ -51,7 +51,7 @@ const handleEditRecipe = (recipe: Recipe) => {
 const handleDeleteRecipe = (recipeId: string) => {
   console.log("Supprimer la recette avec ID :", recipeId);
   // Tu pourras plus tard appeler une fonction pour supprimer depuis Supabase
-     RecipeService.deleteRecipe(recipeId);
+     RecipeManagementService.deleteRecipe(recipeId);
 };
 
 
