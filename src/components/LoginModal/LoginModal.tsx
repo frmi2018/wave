@@ -18,7 +18,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, toggleModal }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
-    console.log("handleLogin appelé"); // 👈 Optionnel
     setIsLoading(true);
 
     try {

@@ -38,7 +38,6 @@ const UserModal: React.FC<UserModalProps> = ({ onClose, onLogout, email }) => {
           if (fetchError) {
             // Si l'erreur est "not found", créer un nouveau profil
             if (fetchError.code === 'PGRST116') {
-              console.log('Profil non trouvé, création d\'un nouveau profil');
               
               const { error: insertError } = await supabase
                 .from('profiles')
@@ -51,13 +50,13 @@ const UserModal: React.FC<UserModalProps> = ({ onClose, onLogout, email }) => {
                 });
               
               if (insertError) {
-                console.error('Erreur lors de la création du profil:', insertError);
+                console.error('❌ Erreur lors de la création du profil:', insertError);
               } else {
-                console.log('Nouveau profil créé avec succès');
+                console.log('✅ Nouveau profil créé avec succès');
                 // On garde l'avatar_url par défaut
               }
             } else {
-              console.error('Erreur lors de la récupération du profil:', fetchError);
+              console.error('❌ Erreur lors de la récupération du profil:', fetchError);
             }
           } else if (profile) {
   setAvatarUrl(profile.avatar_url || 'https://placehold.co/150x150?text=Avatar&font=roboto');
@@ -80,7 +79,6 @@ const UserModal: React.FC<UserModalProps> = ({ onClose, onLogout, email }) => {
 
   const handleImageSuccess = (url: string) => {
     setAvatarUrl(url);
-    console.log('Image sauvegardée avec succès:', url);
   };
   
   const handleImageError = (error: Error) => {

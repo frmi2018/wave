@@ -67,8 +67,6 @@ static async updateRecipe(
   updates: Partial<Recipe> & { ingredients?: any[]; steps?: any[] } // typage plus permissif pour ingredients/steps
 ): Promise<{ success: boolean; message: string; recipe?: Recipe }> {
 
-  console.log("Données reçu par updateRecipe:", updates);
-
   // 🔹 Normaliser les clés pour correspondre aux colonnes en base
   const updatesNormalized = {
     ...updates,
@@ -94,8 +92,6 @@ static async updateRecipe(
       Object.entries(updatesNormalized).filter(([key]) => recipeColumns.includes(key))
     );
 
-    console.log("Recette filtrée:", filteredUpdates);
-
     // 🔹 Étape 2 : mettre à jour la table "recipes"
     if (Object.keys(filteredUpdates).length > 0) {
       const { error: updateError } = await supabase
@@ -111,8 +107,6 @@ static async updateRecipe(
 
     // 🔹 Étape 3 : mise à jour des ingrédients
     if (updatesNormalized.recipe_ingredients) {
-      console.log("Mise à jour des ingrédients:", updatesNormalized.recipe_ingredients);
-
       const { error: deleteIngredientsError } = await supabase
         .from('recipe_ingredients')
         .delete()
@@ -142,8 +136,6 @@ static async updateRecipe(
 
     // 🔹 Étape 4 : mise à jour des étapes
     if (updatesNormalized.recipe_steps) {
-      console.log("Mise à jour des étapes:", updatesNormalized.recipe_steps);
-
       const { error: deleteStepsError } = await supabase
         .from('recipe_steps')
         .delete()

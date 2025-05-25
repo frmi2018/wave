@@ -44,13 +44,10 @@ const UserRecipes: React.FC = () => {
   };
 
 const handleEditRecipe = (recipe: Recipe) => {
-  console.log("Éditer la recette :", recipe);
-  // Tu pourras plus tard ouvrir une modale avec les données pré-remplies
+  // TODO : Modifier une recette
 };
 
 const handleDeleteRecipe = (recipeId: string) => {
-  console.log("Supprimer la recette avec ID :", recipeId);
-  // Tu pourras plus tard appeler une fonction pour supprimer depuis Supabase
      RecipeManagementService.deleteRecipe(recipeId);
 };
 

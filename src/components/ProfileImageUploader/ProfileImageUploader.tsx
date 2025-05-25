@@ -83,11 +83,6 @@ const ProfileImageUploader = ({
 
       // Sauvegarder l'ancienne URL pour pouvoir la supprimer après
       const oldImageUrl = initialImageUrl;
-      console.log('🔍 Analyse de l\'ancienne image:', {
-        oldImageUrl,
-        isCloudinary: isCloudinaryImage(oldImageUrl),
-        currentImageUrl: imageUrl
-      });
 
       // Convertir l'URL data en blob si nécessaire
       let imageBlob: Blob;
@@ -101,21 +96,20 @@ const ProfileImageUploader = ({
       }
 
       // Upload de la nouvelle image sur Cloudinary
-      console.log('📤 Upload de la nouvelle image...');
+
       const cloudinaryUrl = await uploadProfileImageToCloudinary(imageBlob);
-      console.log('✅ Nouvelle image uploadée:', cloudinaryUrl);
+
 
       // Sauvegarder l'URL dans Supabase
-      console.log('💾 Sauvegarde dans Supabase...');
+
       await updateUserAvatar(userId, cloudinaryUrl);
-      console.log('✅ Avatar mis à jour dans Supabase');
+
 
       // Supprimer l'ancienne image de Cloudinary (seulement si c'était une image Cloudinary)
       if (oldImageUrl && isCloudinaryImage(oldImageUrl)) {
-        console.log('🗑️ Tentative de suppression de l\'ancienne image:', oldImageUrl);
+
         try {
           const deleteSuccess = await deleteImageFromCloudinary(oldImageUrl);
-          console.log('🔍 Résultat suppression:', deleteSuccess);
           if (!deleteSuccess) {
             console.warn('⚠️ Impossible de supprimer l\'ancienne image de Cloudinary:', oldImageUrl);
           } else {

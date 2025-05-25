@@ -36,7 +36,6 @@ const RecipeEditModal: React.FC<RecipeEditModalProps> = ({
 
   // Gestion des champs généraux (title, isPublic)
   const handleFormChange = (field: keyof RecipeFormData, value: any) => {
-    console.log('handleFormChange', field, value);
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -98,8 +97,6 @@ const RecipeEditModal: React.FC<RecipeEditModalProps> = ({
       onClose();
     }
   };
-
-  console.log('formData actuel:', formData);
 
   return (
     <div className={styles.modalOverlay} onClick={handleBackdropClick}>

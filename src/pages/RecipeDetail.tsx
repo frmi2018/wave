@@ -85,8 +85,6 @@ const RecipeDetailPage: React.FC = () => {
   const handleEditSubmit = async (formData: any) => {
     if (!recipe || !canModify) return;
 
-    console.log("Données envoyées à updateRecipe:", formData);
-
     setIsSubmitting(true);
     try {
       const result = await RecipeManagementService.updateRecipe(recipe.id, formData);
