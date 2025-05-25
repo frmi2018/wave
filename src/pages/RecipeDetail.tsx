@@ -6,7 +6,7 @@ import { RecipeManagementService } from '../services/recipeManagementService';
 import { RecipeCreationService } from '../services/recipesCreationService';
 import RecipeEditModal from '../components/RecipeEditModal/RecipeEditModal';
 import ConfirmationModal from '../components/ConfirmationModal/ConfirmationModal';
-// import LoadingSpinner from '../components/LoadingSpinner';
+import Spinner from '../components/Spinner/Spinner';
 import { useAuth } from '../context/AuthContext';
 import { useToast} from '../components/Toast/ToastContext'
 import styles from '../styles/RecipeDetail.module.css';
@@ -144,10 +144,7 @@ const RecipeDetailPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className={styles.container}>
-        {/* <LoadingSpinner /> */}
-        chargement en cours...
-      </div>
+    <Spinner />  
     );
   }
 
