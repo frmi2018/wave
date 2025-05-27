@@ -1,0 +1,36 @@
+.mealTypeCell {
+  padding: 16px;
+  background-color: #f9fafb;
+  font-weight: 500;
+  color: #374151;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mealControls {
+  display: flex;
+  gap: 8px;
+}
+
+.controlButton {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.removeButton {
+  background-color: #ef4444;
+}
+
+.addButton {
+  background-color: #10b981;
+}

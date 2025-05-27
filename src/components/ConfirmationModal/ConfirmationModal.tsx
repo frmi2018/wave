@@ -1,8 +1,8 @@
 // components/ConfirmationModal.tsx
 import React, { useEffect } from 'react';
-import { FiAlertTriangle, FiInfo, FiCheckCircle } from 'react-icons/fi';
+import { AlertTriangle, Info, CheckCircle } from 'lucide-react';
 import styles from './ConfirmationModal.module.css';
-import { renderIcon } from '../../utils/iconUtils';
+import PlateSpinner from '../Spinner/Spinner';
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -64,34 +64,29 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
     switch (type) {
       case 'danger':
         return (
-  <span className={styles.iconDanger}>
-    {renderIcon(FiAlertTriangle)}
-  </span>
-);
+          <span className={styles.iconDanger}>
+            <AlertTriangle size={24} />
+          </span>
+        );
       case 'warning':
-return (
-  <span className={styles.iconDanger}>
-    {renderIcon(FiAlertTriangle)}
-  </span>
-);
-
+        return (
+          <span className={styles.iconDanger}>
+            <AlertTriangle size={24} />
+          </span>
+        );
       case 'success':
-
-      return (
-  <span className={styles.iconSuccess}>
-    {renderIcon(FiCheckCircle)}
-  </span>
-);
-
+        return (
+          <span className={styles.iconSuccess}>
+            <CheckCircle size={24} />
+          </span>
+        );
       case 'info':
       default:
-
-return (
-  <span className={styles.iconInfo}>
-    {renderIcon(FiInfo)}
-  </span>
-);
-
+        return (
+          <span className={styles.iconInfo}>
+            <Info size={24} />
+          </span>
+        );
     }
   };
 
@@ -134,7 +129,7 @@ return (
           >
             {isLoading ? (
               <>
-                <span className={styles.spinner}></span>
+                <PlateSpinner/>
                 Chargement...
               </>
             ) : (

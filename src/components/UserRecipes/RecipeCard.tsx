@@ -3,8 +3,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Recipe } from '../../types/recipe';
 import styles from './UserRecipes.module.css';
-import { FiEdit2, FiTrash2 } from 'react-icons/fi';
-import { renderIcon } from '../../utils/iconUtils';
+import { Pencil, Trash2 } from 'lucide-react';
 
 interface RecipeCardProps {
   recipe: Recipe;
@@ -22,11 +21,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   const navigate = useNavigate();
 
   const handleCardClick = (e: React.MouseEvent) => {
-    // Éviter la navigation si on clique sur les boutons d'action
     if ((e.target as HTMLElement).closest(`.${styles.actions}`)) {
       return;
     }
-    
     navigate(`/recipe/${recipe.id}`);
   };
 
@@ -79,14 +76,14 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
           title="Modifier"
           onClick={handleEdit}
         >
-          {renderIcon(FiEdit2)}
+          <Pencil size={16} />
         </button>
         <button
           className={styles.deleteButton}
           title="Supprimer"
           onClick={handleDelete}
         >
-          {renderIcon(FiTrash2)}
+          <Trash2 size={16} />
         </button>
       </div>
     </div>

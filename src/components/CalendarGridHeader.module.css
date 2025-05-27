@@ -1,0 +1,31 @@
+.calendarHeader {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.headerCellFirst {
+  padding: 16px;
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+.headerCell {
+  padding: 16px;
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+  text-align: center;
+}
+
+.dayHeader {
+  font-weight: 600;
+  color: #374151;
+}
+
+.dayDate {
+  font-size: 14px;
+  color: #6b7280;
+  margin-top: 4px;
+}

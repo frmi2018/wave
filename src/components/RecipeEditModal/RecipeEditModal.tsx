@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { Recipe, AvailableIngredient, RecipeFormData } from '../../types/recipe';
 import { useRecipeEdit } from '../../hooks/useRecipeEdit';
 import styles from './RecipeEditModal.module.css';
+import PlateSpinner from '../Spinner/Spinner';
 
 interface RecipeEditModalProps {
   isOpen: boolean;
@@ -273,7 +274,7 @@ const RecipeEditModal: React.FC<RecipeEditModalProps> = ({
             >
               {isSubmitting ? (
                 <>
-                  <span className={styles.spinner}></span>
+                  <PlateSpinner/>
                   Modification en cours...
                 </>
               ) : (

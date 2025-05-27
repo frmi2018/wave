@@ -1,9 +1,13 @@
-// components/IngredientsPage/IngredientsPage.tsx
 import React, { useState, useEffect } from 'react';
-import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiX } from 'react-icons/fi';
+import {
+  Plus,
+  Edit2,
+  Trash2,
+  Search,
+  X
+} from 'lucide-react';
 import styles from './IngredientsPage.module.css';
 import { supabase } from '../../config/supabaseClient';
-import { renderIcon } from '../../utils/iconUtils';
 
 interface Ingredient {
   id: string;
@@ -27,7 +31,6 @@ const IngredientsPage: React.FC = () => {
     category: ''
   });
 
-  // Categories prédéfinies
   const categories = [
     'Legumes',
     'Fruits',
@@ -52,7 +55,6 @@ const IngredientsPage: React.FC = () => {
         .from('ingredients')
         .select('*')
         .order('name');
-
       if (error) throw error;
       setIngredients(data || []);
     } catch (error) {
@@ -68,7 +70,6 @@ const IngredientsPage: React.FC = () => {
 
     try {
       if (editingIngredient) {
-        // Mise à jour
         const { error } = await supabase
           .from('ingredients')
           .update({
@@ -76,20 +77,16 @@ const IngredientsPage: React.FC = () => {
             category: formData.category
           })
           .eq('id', editingIngredient.id);
-
         if (error) throw error;
       } else {
-        // Création
         const { error } = await supabase
           .from('ingredients')
           .insert([{
             name: formData.name.trim(),
             category: formData.category
           }]);
-
         if (error) throw error;
       }
-
       fetchIngredients();
       closeModal();
     } catch (error) {
@@ -110,7 +107,6 @@ const IngredientsPage: React.FC = () => {
         .from('ingredients')
         .delete()
         .eq('id', ingredientToDelete.id);
-
       if (error) throw error;
       fetchIngredients();
       setShowDeleteModal(false);
@@ -182,18 +178,15 @@ const IngredientsPage: React.FC = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Gestion des Ingrédients</h1>
-        <button 
-          className={styles.addButton}
-          onClick={() => openModal()}
-        >
-          {renderIcon(FiPlus)}
+        <button className={styles.addButton} onClick={() => openModal()}>
+          <Plus className={styles.icon} />
           Ajouter un ingrédient
         </button>
       </div>
 
       <div className={styles.filters}>
         <div className={styles.searchContainer}>
-          {renderIcon(FiSearch)}
+          <Search className={styles.icon} />
           <input
             type="text"
             placeholder="Rechercher un ingrédient..."
@@ -227,18 +220,18 @@ const IngredientsPage: React.FC = () => {
                   className={styles.editButton}
                   title="Modifier"
                 >
-                  {renderIcon(FiEdit2)}
+                  <Edit2 className={styles.icon} />
                 </button>
                 <button
                   onClick={() => handleDeleteClick(ingredient)}
                   className={styles.deleteButton}
                   title="Supprimer"
                 >
-                  {renderIcon(FiTrash2)}
+                  <Trash2 className={styles.icon} />
                 </button>
               </div>
             </div>
-            <div 
+            <div
               className={styles.category}
               style={{ backgroundColor: getCategoryColor(ingredient.category) }}
             >
@@ -251,11 +244,8 @@ const IngredientsPage: React.FC = () => {
       {filteredIngredients.length === 0 && (
         <div className={styles.emptyState}>
           <p>Aucun ingrédient trouvé</p>
-          <button 
-            className={styles.addButton}
-            onClick={() => openModal()}
-          >
-            {renderIcon(FiPlus)}
+          <button className={styles.addButton} onClick={() => openModal()}>
+            <Plus className={styles.icon} />
             Ajouter le premier ingrédient
           </button>
         </div>
@@ -266,11 +256,8 @@ const IngredientsPage: React.FC = () => {
           <div className={styles.modal}>
             <div className={styles.modalHeader}>
               <h2>{editingIngredient ? 'Modifier l\'ingrédient' : 'Nouvel ingrédient'}</h2>
-              <button
-                onClick={closeModal}
-                className={styles.closeButton}
-              >
-                {renderIcon(FiX)}
+              <button onClick={closeModal} className={styles.closeButton}>
+                <X className={styles.icon} />
               </button>
             </div>
             <form onSubmit={handleSubmit} className={styles.form}>
@@ -300,9 +287,9 @@ const IngredientsPage: React.FC = () => {
                     </option>
                   )}
                   {categories
-                    .filter(category => 
-                      !editingIngredient || 
-                      category !== originalCategory || 
+                    .filter(category =>
+                      !editingIngredient ||
+                      category !== originalCategory ||
                       formData.category !== originalCategory
                     )
                     .map(category => (
@@ -313,17 +300,10 @@ const IngredientsPage: React.FC = () => {
                 </select>
               </div>
               <div className={styles.formActions}>
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className={styles.cancelButton}
-                >
+                <button type="button" onClick={closeModal} className={styles.cancelButton}>
                   Annuler
                 </button>
-                <button
-                  type="submit"
-                  className={styles.submitButton}
-                >
+                <button type="submit" className={styles.submitButton}>
                   {editingIngredient ? 'Modifier' : 'Ajouter'}
                 </button>
               </div>
@@ -332,17 +312,13 @@ const IngredientsPage: React.FC = () => {
         </div>
       )}
 
-      {/* Modal de confirmation de suppression */}
       {showDeleteModal && ingredientToDelete && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
             <div className={styles.modalHeader}>
               <h2>Confirmer la suppression</h2>
-              <button
-                onClick={handleDeleteCancel}
-                className={styles.closeButton}
-              >
-                {renderIcon(FiX)}
+              <button onClick={handleDeleteCancel} className={styles.closeButton}>
+                <X className={styles.icon} />
               </button>
             </div>
             <div className={styles.deleteModalContent}>
@@ -350,20 +326,12 @@ const IngredientsPage: React.FC = () => {
                 Êtes-vous sûr de vouloir supprimer l'ingrédient{' '}
                 <strong>"{ingredientToDelete.name}"</strong> ?
               </p>
-              <p className={styles.deleteWarning}>
-                Cette action est irréversible.
-              </p>
+              <p className={styles.deleteWarning}>Cette action est irréversible.</p>
               <div className={styles.formActions}>
-                <button
-                  onClick={handleDeleteCancel}
-                  className={styles.cancelButton}
-                >
+                <button onClick={handleDeleteCancel} className={styles.cancelButton}>
                   Annuler
                 </button>
-                <button
-                  onClick={handleDeleteConfirm}
-                  className={styles.deleteConfirmButton}
-                >
+                <button onClick={handleDeleteConfirm} className={styles.deleteConfirmButton}>
                   Supprimer
                 </button>
               </div>

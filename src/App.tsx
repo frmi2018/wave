@@ -8,6 +8,7 @@ import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import Home from "./pages/Home";
 import IngredientsPage from './components/IngredientsPage/IngredientsPage';
 import RecipeDetailPage from './pages/RecipeDetail';
+import CalendarPage from "./pages/CalendarPage";
 import "./global.css";
 
 
@@ -31,7 +32,14 @@ function App() {
     <RecipeDetailPage />
   </PrivateRoute>
 } />
-                
+<Route path="/calendar" element={
+  <PrivateRoute>
+<CalendarPage />
+  </PrivateRoute>
+} />
+     
+
+
 
             </Route>           
           </Routes>
