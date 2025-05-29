@@ -75,9 +75,10 @@ const Home: React.FC = () => {
                       </div>
                     </div>
                     <ul className={styles.features}>
-                      <li>5 recettes maximum</li>
+                      <li>Accès aux recettes Wawe</li>
+                      <li>Accès aux ingrédients Wawe</li>
+                      <li>5 recettes personnelles</li>
                       <li>Accès aux fonctionnalités de base</li>
-                      <li>Support communautaire</li>
                     </ul>
                     <button 
                       className={`${styles.selectButton} ${styles.freeButton}`}
@@ -97,10 +98,11 @@ const Home: React.FC = () => {
                       </div>
                     </div>
                     <ul className={styles.features}>
-                      <li>Recettes illimitées</li>
-                      <li>Toutes les fonctionnalités</li>
-                      <li>Support prioritaire</li>
-                      <li>Export des recettes</li>
+                      <li>Accès aux recettes Wawe</li>
+                      <li>Accès aux ingrédients Wawe</li>
+                      <li>15 Recettes personnelles</li>
+                      <li>30 ingrédients personnelles</li>
+                      <li>Calendrier de plannification des repas</li>
                     </ul>
                     <button 
                       className={`${styles.selectButton} ${styles.monthlyButton}`}
@@ -121,9 +123,10 @@ const Home: React.FC = () => {
                     </div>
                     <ul className={styles.features}>
                       <li>Recettes illimitées</li>
-                      <li>Toutes les fonctionnalités</li>
-                      <li>Support VIP</li>
-                      <li>Export des recettes</li>
+                      <li>Ajout lien vers une video de votre recette</li>
+                      <li>Ingrédients illimitées</li>
+                      <li>Partage de recettes entre utilisateurs</li>
+                      <li>Partage d'ingrédients entre utilisateurs</li>
                       <li>Accès anticipé aux nouveautés</li>
                     </ul>
                     <button 
