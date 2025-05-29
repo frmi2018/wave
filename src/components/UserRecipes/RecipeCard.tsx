@@ -3,7 +3,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Recipe } from '../../types/recipe';
 import styles from './UserRecipes.module.css';
-import { Pencil, Trash2 } from 'lucide-react';
 
 interface RecipeCardProps {
   recipe: Recipe;
