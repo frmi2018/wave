@@ -19,7 +19,7 @@ const initialFormData: RecipeFormData = {
   title: '',
   ingredients: [{ ingredient_id: '', quantity: 0, unit: '' }],
   steps: [{ step_number: 1, description: '' }],
-  isPublic: false
+  is_public: false
 };
 
 export const useRecipeEdit = (): UseRecipeEditReturn => {
@@ -39,7 +39,8 @@ export const useRecipeEdit = (): UseRecipeEditReturn => {
           step_number: step.step_number,
           description: step.description
         })),
-      isPublic: recipe.is_public || false
+      is_public: typeof recipe.is_public === 'boolean' ? recipe.is_public : false
+
     });
   }, []);
 

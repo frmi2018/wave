@@ -10,6 +10,7 @@ import IngredientsPage from './components/IngredientsPage/IngredientsPage';
 import RecipeDetailPage from './pages/RecipeDetail';
 import CalendarPage from "./pages/CalendarPage";
 import "./global.css";
+import Navbar from "./components/Navbar/Navbar";
 
 
 function App() {
@@ -24,16 +25,19 @@ function App() {
             
 <Route path="/ingredients" element={
   <PrivateRoute>
+    <Navbar/>
     <IngredientsPage />
   </PrivateRoute>
 } />
 <Route path="/recipe/:id" element={
   <PrivateRoute>
+        <Navbar/>
     <RecipeDetailPage />
   </PrivateRoute>
 } />
 <Route path="/calendar" element={
   <PrivateRoute>
+        <Navbar/>
 <CalendarPage />
   </PrivateRoute>
 } />

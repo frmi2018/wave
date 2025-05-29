@@ -1,0 +1,310 @@
+/* styles/Home.module.css */
+.container {
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.landingPage {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40px 20px;
+}
+
+.hero {
+  text-align: center;
+  color: white;
+  margin-bottom: 60px;
+  padding-top: 80px;
+}
+
+.heroTitle {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.heroSubtitle {
+  font-size: 1.3rem;
+  font-weight: 300;
+  margin: 0;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.pricingSection {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pricingTitle {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: white;
+  margin: 0 0 50px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.pricingCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-bottom: 50px;
+}
+
+.pricingCard {
+  background: white;
+  border-radius: 16px;
+  padding: 40px 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.pricingCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.popular {
+  border-color: #007bff;
+  transform: scale(1.05);
+}
+
+.popular:hover {
+  transform: scale(1.05) translateY(-5px);
+}
+
+.popularBadge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #007bff;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.cardHeader {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.planName {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 15px 0;
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.priceAmount {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #007bff;
+}
+
+.pricePeriod {
+  font-size: 1.2rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.savings {
+  background: #28a745;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 30px 0;
+}
+
+.features li {
+  padding: 12px 0;
+  color: #333;
+  font-size: 1rem;
+  position: relative;
+  padding-left: 25px;
+}
+
+.features li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #28a745;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.selectButton {
+  width: 100%;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.freeButton {
+  background: #6c757d;
+  color: white;
+}
+
+.freeButton:hover {
+  background: #5a6268;
+  transform: translateY(-2px);
+}
+
+.monthlyButton {
+  background: #007bff;
+  color: white;
+}
+
+.monthlyButton:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+}
+
+.annualButton {
+  background: #28a745;
+  color: white;
+}
+
+.annualButton:hover {
+  background: #1e7e34;
+  transform: translateY(-2px);
+}
+
+.loginSection {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.loginText {
+  color: white;
+  font-size: 1.1rem;
+  margin: 0 0 15px 0;
+}
+
+.loginLink {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.loginLink:hover {
+  background: white;
+  color: #667eea;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .landingPage {
+    padding: 20px 15px;
+  }
+
+  .hero {
+    padding-top: 40px;
+    margin-bottom: 40px;
+  }
+
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1.1rem;
+  }
+
+  .pricingTitle {
+    font-size: 2rem;
+    margin-bottom: 30px;
+  }
+
+  .pricingCards {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .pricingCard {
+    padding: 30px 20px;
+  }
+
+  .popular {
+    transform: none;
+  }
+
+  .popular:hover {
+    transform: translateY(-5px);
+  }
+
+  .planName {
+    font-size: 1.5rem;
+  }
+
+  .priceAmount {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1rem;
+  }
+
+  .pricingTitle {
+    font-size: 1.8rem;
+  }
+
+  .pricingCard {
+    padding: 25px 15px;
+  }
+
+  .priceAmount {
+    font-size: 2rem;
+  }
+}

@@ -3,18 +3,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Recipe } from '../../types/recipe';
 import styles from './UserRecipes.module.css';
-import { Pencil, Trash2 } from 'lucide-react';
 
 interface RecipeCardProps {
   recipe: Recipe;
-  onAddImage: (recipeId: string) => void;
-  onEdit: (recipe: Recipe) => void;
-  onDelete: (recipeId: string) => void;
 }
 
 const RecipeCard: React.FC<RecipeCardProps> = ({ 
   recipe, 
-  onAddImage, 
 }) => {
   const navigate = useNavigate();
 
@@ -23,11 +18,6 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
       return;
     }
     navigate(`/recipe/${recipe.id}`);
-  };
-
-  const handleAddImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onAddImage(recipe.id);
   };
 
   return (
@@ -43,7 +33,6 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
         <div className={styles.noImage}>
           <button 
             className={styles.addImageButton}
-            onClick={handleAddImage}
           >
             Ajouter une image
           </button>

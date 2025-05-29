@@ -22,13 +22,12 @@ export const useRecipes = (userId: string | null): UseRecipesReturn => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
+  
   const fetchUserRecipes = useCallback(async () => {
     if (!userId) return;
 
     setIsLoading(true);
     setErrorMessage(null);
-
     try {
       const data = await RecipeManagementService.getUserRecipes(userId);
       setRecipes(data);
@@ -62,7 +61,6 @@ export const useRecipes = (userId: string | null): UseRecipesReturn => {
     }
 
     setIsSubmitting(true);
-
     try {
       const recipeId = await RecipeCreationService.createRecipe(formData, userId);
       if (!recipeId) throw new Error("La création de la recette a échoué, ID manquant");

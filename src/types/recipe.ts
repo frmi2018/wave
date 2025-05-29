@@ -43,12 +43,12 @@ export interface RecipeFormData {
   title: string;
   ingredients: Ingredient[];
   steps: Step[];
-  isPublic: boolean;
+  is_public: boolean;
 }
 
 export const initialFormData: RecipeFormData = {
   title: '',
   ingredients: [{ ingredient_id: '', quantity: 0, unit: '' }],
   steps: [{ step_number: 1, description: '' }],
-  isPublic: false
+  is_public: false
 };

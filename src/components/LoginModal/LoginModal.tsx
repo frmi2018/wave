@@ -18,6 +18,11 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, toggleModal }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
+    if (!email.trim() || !password.trim()) {
+      showToast("Veuillez remplir tous les champs.", "error", 3000);
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -36,48 +41,86 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, toggleModal }) => {
     }
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !isLoading) {
+      handleLogin();
+    }
+  };
+
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className={styles.overlay}>
-      <div className={styles.modal} onClick={e => e.stopPropagation()}>
-        <div style={{ padding: "1rem", backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)" }}>
-          <h2 style={{textAlign:"center"}}>Connexion</h2>
-          <div style={{ marginBottom: "10px" }}>
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={{ width: "100%", padding: "8px", marginBottom: "8px" }}
-            />
-            <input
-              type="password"
-              placeholder="Mot de passe"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{ width: "100%", padding: "8px", marginBottom: "8px" }}
-              onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-            />
+    <div className={styles.overlay} onClick={handleOverlayClick}>
+      <div className={styles.modal}>
+        <button className={styles.closeButton} onClick={onClose} aria-label="Fermer">
+          ×
+        </button>
+        
+        <div className={styles.modalContent}>
+          <div className={styles.header}>
+            <h2 className={styles.title}>Connexion</h2>
+            <p className={styles.subtitle}>Accédez à votre compte RecipeApp</p>
           </div>
 
-          <button 
-            onClick={handleLogin} 
-            disabled={isLoading} 
-            style={{ width: "100%", padding: "8px", backgroundColor: "#007BFF", color: "#fff", border: "none", cursor: "pointer" }}
-          >
-            {isLoading ? "Connexion..." : "Se connecter"}
-          </button>
-          <div style={{ marginTop: "10px", textAlign: "center" }}>
-            <p style={{ textAlign:"center" }}>
+          <form className={styles.form} onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+            <div className={styles.inputGroup}>
+              <input
+                type="email"
+                placeholder="Adresse email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyPress={handleKeyPress}
+                className={styles.input}
+                disabled={isLoading}
+                autoComplete="email"
+                required
+              />
+            </div>
+
+            <div className={styles.inputGroup}>
+              <input
+                type="password"
+                placeholder="Mot de passe"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyPress={handleKeyPress}
+                className={styles.input}
+                disabled={isLoading}
+                autoComplete="current-password"
+                required
+              />
+            </div>
+
+            <button 
+              type="submit"
+              onClick={handleLogin}
+              disabled={isLoading}
+              className={styles.submitButton}
+            >
+              {isLoading ? (
+                <span className={styles.loading}>
+                  <span className={styles.spinner}></span>
+                  Connexion...
+                </span>
+              ) : (
+                "Se connecter"
+              )}
+            </button>
+          </form>
+
+          <div className={styles.footer}>
+            <p className={styles.footerText}>
               Pas encore de compte ?{" "}
-              <span
-                style={{ cursor: "pointer", color: "#007BFF" }}
-                onClick={toggleModal}
-              >
+              <span className={styles.toggleLink} onClick={toggleModal}>
                 S'inscrire
               </span>
             </p>
           </div>
-        </div>      
+        </div>
       </div>
     </div>
   );

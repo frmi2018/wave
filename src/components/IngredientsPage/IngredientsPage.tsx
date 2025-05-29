@@ -1,3 +1,4 @@
+// IngredientsPage.tsx
 import React, { useState, useEffect } from 'react';
 import {
   Plus,
@@ -14,6 +15,8 @@ interface Ingredient {
   name: string;
   category: string;
   created_at?: string;
+  is_public?: boolean;
+  created_by?: string; // 👈 à ajouter
 }
 
 const IngredientsPage: React.FC = () => {
@@ -26,11 +29,13 @@ const IngredientsPage: React.FC = () => {
   const [ingredientToDelete, setIngredientToDelete] = useState<Ingredient | null>(null);
   const [editingIngredient, setEditingIngredient] = useState<Ingredient | null>(null);
   const [originalCategory, setOriginalCategory] = useState<string>('');
-  const [formData, setFormData] = useState({
-    name: '',
-    category: ''
-  });
-
+const [formData, setFormData] = useState({
+  name: '',
+  category: '',
+  is_public: false
+});
+const [userId, setUserId] = useState<string | null>(null);
+const [userRole, setUserRole] = useState<string | null>(null);
   const categories = [
     'Legumes',
     'Fruits',
@@ -41,52 +46,101 @@ const IngredientsPage: React.FC = () => {
     'Legumineuses',
     'Epices',
     'Huiles',
+    'Arômes',
+    'Alcools',
     'Autres'
   ];
 
-  useEffect(() => {
-    fetchIngredients();
-  }, []);
 
-  const fetchIngredients = async () => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('ingredients')
-        .select('*')
-        .order('name');
-      if (error) throw error;
-      setIngredients(data || []);
-    } catch (error) {
-      console.error('Erreur lors du chargement des ingrédients:', error);
-    } finally {
-      setLoading(false);
+const fetchIngredients = React.useCallback(async () => {
+  try {
+    setLoading(true);
+    let query = supabase
+      .from('ingredients')
+      .select('*')
+      .order('name');
+
+    if (userRole === 'user' && userId) {
+      query = query.or(`is_public.eq.true,created_by.eq.${userId}`);
+    }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    setIngredients(data || []);
+  } catch (error) {
+    console.error('Erreur lors du chargement des ingrédients:', error);
+  } finally {
+    setLoading(false);
+  }
+}, [userRole, userId]);
+
+
+
+
+useEffect(() => {
+  const fetchUser = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      setUserId(user.id);
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+      setUserRole(profile?.role || null);
     }
   };
+
+  fetchUser();
+}, []); // 👈 une seule fois au chargement
+
+useEffect(() => {
+  if (userRole && userId) {
+    fetchIngredients();
+  }
+}, [userRole, userId, fetchIngredients]); // 👈 déclenché quand les deux sont connus
+
+
+
+
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim() || !formData.category.trim()) return;
 
     try {
-      if (editingIngredient) {
-        const { error } = await supabase
-          .from('ingredients')
-          .update({
-            name: formData.name.trim(),
-            category: formData.category
-          })
-          .eq('id', editingIngredient.id);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase
-          .from('ingredients')
-          .insert([{
-            name: formData.name.trim(),
-            category: formData.category
-          }]);
-        if (error) throw error;
-      }
+  const isPublicToSave = userRole === 'admin' ? formData.is_public : false;
+if (editingIngredient) {
+  // Autoriser uniquement si admin ou créateur
+  if (userRole !== 'admin' && editingIngredient.created_by !== userId) {
+    alert("Vous n'avez pas le droit de modifier cet ingrédient.");
+    return;
+  }
+
+  const { error } = await supabase
+    .from('ingredients')
+    .update({
+      name: formData.name.trim(),
+      category: formData.category,
+      is_public: isPublicToSave
+    })
+    .eq('id', editingIngredient.id);
+  if (error) throw error;
+} else {
+  const { error } = await supabase
+    .from('ingredients')
+    .insert([{
+      name: formData.name.trim(),
+      category: formData.category,
+      created_by: userId,
+      is_public: isPublicToSave
+    }]);
+  if (error) throw error;
+}
+
+
+
       fetchIngredients();
       closeModal();
     } catch (error) {
@@ -100,7 +154,12 @@ const IngredientsPage: React.FC = () => {
   };
 
   const handleDeleteConfirm = async () => {
-    if (!ingredientToDelete) return;
+if (!ingredientToDelete) return;
+
+if (userRole !== 'admin' && ingredientToDelete.created_by !== userId) {
+  alert("Vous n'avez pas le droit de supprimer cet ingrédient.");
+  return;
+}
 
     try {
       const { error } = await supabase
@@ -125,27 +184,28 @@ const IngredientsPage: React.FC = () => {
     if (ingredient) {
       setEditingIngredient(ingredient);
       setOriginalCategory(ingredient.category);
-      setFormData({
-        name: ingredient.name,
-        category: ingredient.category
-      });
+setFormData({
+  name: ingredient.name,
+  category: ingredient.category,
+  is_public: (ingredient as any).is_public ?? false // ← Ajouté ici
+});
     } else {
       setEditingIngredient(null);
       setOriginalCategory('');
-      setFormData({ name: '', category: '' });
+      setFormData({ name: '', category: '', is_public: false }); // ← Ajouté ici aussi
     }
     setShowModal(true);
   };
 
-  const closeModal = () => {
-    setShowModal(false);
-    setEditingIngredient(null);
-    setOriginalCategory('');
-    setFormData({ name: '', category: '' });
-  };
+const closeModal = () => {
+  setShowModal(false);
+  setEditingIngredient(null);
+  setOriginalCategory('');
+  setFormData({ name: '', category: '', is_public: false }); // ← ✅ Corrigé
+};
 
   const filteredIngredients = ingredients.filter(ingredient => {
-    const matchesSearch = ingredient.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = (ingredient.name ?? '').toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategory === '' || ingredient.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
@@ -214,6 +274,7 @@ const IngredientsPage: React.FC = () => {
           <div key={ingredient.id} className={styles.ingredientCard}>
             <div className={styles.cardHeader}>
               <h3 className={styles.ingredientName}>{ingredient.name}</h3>
+              {ingredient.created_by === userId && (
               <div className={styles.actions}>
                 <button
                   onClick={() => openModal(ingredient)}
@@ -229,7 +290,7 @@ const IngredientsPage: React.FC = () => {
                 >
                   <Trash2 className={styles.icon} />
                 </button>
-              </div>
+              </div>)}
             </div>
             <div
               className={styles.category}
@@ -299,6 +360,21 @@ const IngredientsPage: React.FC = () => {
                     ))}
                 </select>
               </div>
+{userRole === 'admin' && (
+  <div className={styles.inputGroup}>
+    <label htmlFor="is_public">Rendre public</label>
+    <input
+      type="checkbox"
+      id="is_public"
+      checked={formData.is_public}
+      onChange={(e) =>
+        setFormData({ ...formData, is_public: e.target.checked })
+      }
+    />
+  </div>
+)}
+
+
               <div className={styles.formActions}>
                 <button type="button" onClick={closeModal} className={styles.cancelButton}>
                   Annuler

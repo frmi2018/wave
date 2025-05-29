@@ -15,7 +15,7 @@ export class RecipeCreationService {
           description: '', // Tu peux ajouter description au formulaire si besoin
           cooking_time: 0, // Tu peux ajouter ces champs au formulaire si besoin
           servings: 1,
-          is_public: formData.isPublic,
+          is_public: formData.is_public,
           image_url: null
         })
         .select()

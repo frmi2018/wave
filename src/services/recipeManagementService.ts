@@ -60,6 +60,35 @@ export class RecipeManagementService {
     }
   }
 
+
+  // Récupérer toutes les recettes d'un autre utilisateur
+  static async getOtherUserRecipes(otherUserId: string): Promise<Recipe[]> {
+    try {
+      const { data, error } = await supabase
+        .from('recipes')
+        .select(`
+          *,
+          recipe_ingredients (
+            *
+          ),
+          recipe_steps (
+            *
+          )
+        `)
+        .eq('is_public', true)
+        .eq('user_id', otherUserId) // si tu veux les recettes d’un utilisateur spécifique
+
+      if (error) throw new Error(error.message);
+
+      return data || [];
+    } catch (error) {
+      console.error('Erreur générale:', error);
+      return [];
+    }
+  }
+
+
+
 // services/recipeManagementService.ts
 
 static async updateRecipe(
@@ -92,7 +121,7 @@ static async updateRecipe(
       Object.entries(updatesNormalized).filter(([key]) => recipeColumns.includes(key))
     );
 
-    // 🔹 Étape 2 : mettre à jour la table "recipes"
+     // 🔹 Étape 2 : mettre à jour la table "recipes"
     if (Object.keys(filteredUpdates).length > 0) {
       const { error: updateError } = await supabase
         .from('recipes')

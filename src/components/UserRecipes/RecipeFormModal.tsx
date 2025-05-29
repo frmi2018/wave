@@ -140,8 +140,8 @@ const RecipeFormModal: React.FC<RecipeFormModalProps> = ({
             <label>
               <input
                 type="checkbox"
-                checked={formData.isPublic}
-                onChange={(e) => setFormData({...formData, isPublic: e.target.checked})}
+                checked={formData.is_public}
+                onChange={(e) => setFormData({...formData, is_public: e.target.checked})}
               />
               Rendre cette recette publique
             </label>

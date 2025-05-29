@@ -35,7 +35,7 @@ const RecipeEditModal: React.FC<RecipeEditModalProps> = ({
     resetForm
   } = useRecipeEdit();
 
-  // Gestion des champs généraux (title, isPublic)
+  // Gestion des champs généraux (title, is_public)
   const handleFormChange = (field: keyof RecipeFormData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -254,8 +254,8 @@ const RecipeEditModal: React.FC<RecipeEditModalProps> = ({
               <label className={styles.checkboxLabel}>
                 <input
                   type="checkbox"
-                  checked={formData.isPublic}
-                  onChange={(e) => handleFormChange('isPublic', e.target.checked)}
+                  checked={formData.is_public}
+                  onChange={(e) => handleFormChange('is_public', e.target.checked)}
                   disabled={isSubmitting}
                   className={styles.checkbox}
                 />
