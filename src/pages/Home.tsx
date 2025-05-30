@@ -98,11 +98,12 @@ const Home: React.FC = () => {
                       </div>
                     </div>
                     <ul className={styles.features}>
-                      <li>Accès aux recettes Wawe</li>
-                      <li>Accès aux ingrédients Wawe</li>
-                      <li>15 Recettes personnelles</li>
-                      <li>30 ingrédients personnelles</li>
-                      <li>Calendrier de plannification des repas</li>
+                      <li>Forfait gratuit</li>
+                      <li>+ 15 Recettes personnelles</li>
+                      <li>+ 30 Ingrédients personnels</li>
+                      <li>Gestion des repas !</li>
+                      <li>+ Ajout de produits tout prêt pour composer vos repas</li>
+                      <li>+ Calendrier de plannification des repas</li>
                     </ul>
                     <button 
                       className={`${styles.selectButton} ${styles.monthlyButton}`}
@@ -122,12 +123,15 @@ const Home: React.FC = () => {
                       <div className={styles.savings}>Économisez 50%</div>
                     </div>
                     <ul className={styles.features}>
-                      <li>Recettes illimitées</li>
-                      <li>Ajout lien vers une video de votre recette</li>
-                      <li>Ingrédients illimitées</li>
-                      <li>Partage de recettes entre utilisateurs</li>
-                      <li>Partage d'ingrédients entre utilisateurs</li>
-                      <li>Accès anticipé aux nouveautés</li>
+                      <li>Abonement mensuel</li>
+                      <li>+ 100 Recettes personnels</li>
+                      <li>+ 100 Ingrédients/produits personnels</li>
+                      <li>Partager !</li>
+                      <li>+ Ajout d'un lien vers une video dans vos recettes</li>
+                      <li>+ Partage de recettes entre utilisateurs</li>
+                      <li>+ Partage d'ingrédients entre utilisateurs</li>
+                      <li>+ Partage de produits entre utilisateurs</li>
+                      <li>+ Accès anticipé aux nouveautés</li>
                     </ul>
                     <button 
                       className={`${styles.selectButton} ${styles.annualButton}`}
