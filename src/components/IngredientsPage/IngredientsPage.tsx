@@ -1,5 +1,6 @@
 // IngredientsPage.tsx
 import React, { useState, useEffect } from 'react';
+import { useAuth } from "../../context/AuthContext";
 import {
   Plus,
   Edit2,
@@ -19,7 +20,10 @@ interface Ingredient {
   created_by?: string; // 👈 à ajouter
 }
 
+
+
 const IngredientsPage: React.FC = () => {
+  const { user, userRole } = useAuth();
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -34,8 +38,7 @@ const [formData, setFormData] = useState({
   category: '',
   is_public: false
 });
-const [userId, setUserId] = useState<string | null>(null);
-const [userRole, setUserRole] = useState<string | null>(null);
+
   const categories = [
     'Legumes',
     'Fruits',
@@ -46,13 +49,12 @@ const [userRole, setUserRole] = useState<string | null>(null);
     'Legumineuses',
     'Epices',
     'Huiles',
-    'Arômes',
-    'Alcools',
     'Autres'
   ];
 
 
 const fetchIngredients = React.useCallback(async () => {
+    if (!user || !userRole) return;
   try {
     setLoading(true);
     let query = supabase
@@ -60,9 +62,9 @@ const fetchIngredients = React.useCallback(async () => {
       .select('*')
       .order('name');
 
-    if (userRole === 'user' && userId) {
-      query = query.or(`is_public.eq.true,created_by.eq.${userId}`);
-    }
+if (userRole === 'user' && user?.id) {
+  query = query.or(`is_public.eq.true,created_by.eq.${user.id}`);
+}
 
     const { data, error } = await query;
     if (error) throw error;
@@ -72,38 +74,14 @@ const fetchIngredients = React.useCallback(async () => {
   } finally {
     setLoading(false);
   }
-}, [userRole, userId]);
-
-
+}, [userRole, user]);
 
 
 useEffect(() => {
-  const fetchUser = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      setUserId(user.id);
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single();
-      setUserRole(profile?.role || null);
-    }
-  };
-
-  fetchUser();
-}, []); // 👈 une seule fois au chargement
-
-useEffect(() => {
-  if (userRole && userId) {
+  if (user && userRole) {
     fetchIngredients();
   }
-}, [userRole, userId, fetchIngredients]); // 👈 déclenché quand les deux sont connus
-
-
-
-
-
+}, [userRole, user, fetchIngredients]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,7 +91,7 @@ useEffect(() => {
   const isPublicToSave = userRole === 'admin' ? formData.is_public : false;
 if (editingIngredient) {
   // Autoriser uniquement si admin ou créateur
-  if (userRole !== 'admin' && editingIngredient.created_by !== userId) {
+  if (userRole !== 'admin' && editingIngredient.created_by !== user?.id) {
     alert("Vous n'avez pas le droit de modifier cet ingrédient.");
     return;
   }
@@ -128,12 +106,16 @@ if (editingIngredient) {
     .eq('id', editingIngredient.id);
   if (error) throw error;
 } else {
+  if (!user) {
+  console.error("Utilisateur non authentifié.");
+  return;
+}
   const { error } = await supabase
     .from('ingredients')
     .insert([{
       name: formData.name.trim(),
       category: formData.category,
-      created_by: userId,
+      created_by: user.id,
       is_public: isPublicToSave
     }]);
   if (error) throw error;
@@ -156,10 +138,11 @@ if (editingIngredient) {
   const handleDeleteConfirm = async () => {
 if (!ingredientToDelete) return;
 
-if (userRole !== 'admin' && ingredientToDelete.created_by !== userId) {
+if (userRole !== 'admin' && ingredientToDelete.created_by !== user?.id) {
   alert("Vous n'avez pas le droit de supprimer cet ingrédient.");
   return;
 }
+
 
     try {
       const { error } = await supabase
@@ -274,23 +257,24 @@ const closeModal = () => {
           <div key={ingredient.id} className={styles.ingredientCard}>
             <div className={styles.cardHeader}>
               <h3 className={styles.ingredientName}>{ingredient.name}</h3>
-              {ingredient.created_by === userId && (
-              <div className={styles.actions}>
-                <button
-                  onClick={() => openModal(ingredient)}
-                  className={styles.editButton}
-                  title="Modifier"
-                >
-                  <Edit2 className={styles.icon} />
-                </button>
-                <button
-                  onClick={() => handleDeleteClick(ingredient)}
-                  className={styles.deleteButton}
-                  title="Supprimer"
-                >
-                  <Trash2 className={styles.icon} />
-                </button>
-              </div>)}
+              {(userRole === "admin" || (user && ingredient.created_by === user.id)) && (
+                <div className={styles.actions}>
+                  <button
+                    onClick={() => openModal(ingredient)}
+                    className={styles.editButton}
+                    title="Modifier"
+                  >
+                    <Edit2 className={styles.icon} />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteClick(ingredient)}
+                    className={styles.deleteButton}
+                    title="Supprimer"
+                  >
+                    <Trash2 className={styles.icon} />
+                  </button>
+                </div>
+              )}
             </div>
             <div
               className={styles.category}

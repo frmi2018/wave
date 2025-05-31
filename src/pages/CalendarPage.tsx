@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Plus, X, ChefHat, Clock } from 'lucide-react';
 import styles from './CalendarPage.module.css';
-import CalendarHeader from '../components/CalendarHeader';
-import CalendarGridHeader from '../components/CalendarGridHeader';
-import MealTypeCell from "../components/MealTypeCell";
-import PlannedRecipeCard from "../components/PlannedRecipeCard";
+import CalendarHeader from '../components/Calendar/CalendarHeader';
+import CalendarGridHeader from '../components/Calendar/CalendarGridHeader';
+import MealTypeCell from "../components/Calendar/MealTypeCell";
+import PlannedRecipeCard from "../components/Calendar/PlannedRecipeCard";
 import { useMeals } from '../hooks/useMeals';
 import { useWeek } from '../hooks/useWeek';
 import type { Recipe } from '../types/calendar'

@@ -6,7 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 import UserModal from "../UserModal/UserModal";
 
 const Navbar: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user, userRole, logout } = useAuth();
   const [showModal, setShowModal] = useState(false);
 
   const handleLogout = async () => {
@@ -38,7 +38,7 @@ const Navbar: React.FC = () => {
             className={styles.icon} 
             onClick={() => setShowModal(!showModal)}
           >
-            <User size={24} />
+            <User size={24} color={userRole === "admin" ? "red" : "white"} />
           </div>
         </div>
       ) : null}
